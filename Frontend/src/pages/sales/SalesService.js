@@ -17,7 +17,6 @@ export const getSales = async (
 };
 
 export const getSalesMasters = async () => {
-
     const [
         customers,
         products,
@@ -27,35 +26,30 @@ export const getSalesMasters = async () => {
     ]);
 
     return {
-        customers: customers.data.results,
-        products: products.data.results,
+        customers: customers.data?.results || customers.data || [],
+        products: products.data?.results || products.data || [],
     };
-
 };
 
 export const createSale = async (data) => {
-
     const response = await api.post(
         "sales/",
         data
     );
 
     return response.data;
-
 };
 
 export const updateSale = async (
     id,
     data
 ) => {
-
-    const response = await api.put(
+    const response = await api.patch(
         `sales/${id}/`,
         data
     );
 
     return response.data;
-
 };
 
 export const deleteSale = async (id) => {

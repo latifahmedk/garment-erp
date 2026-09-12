@@ -26,8 +26,8 @@ export const getPurchaseMasters = async () => {
     ]);
 
     return {
-        suppliers: suppliers.data.results,
-        products: products.data.results,
+        suppliers: suppliers.data?.results || suppliers.data || [],
+        products: products.data?.results || products.data || [],
     };
 };
 
@@ -44,7 +44,7 @@ export const updatePurchase = async (
     id,
     data
 ) => {
-    const response = await api.put(
+    const response = await api.patch(
         `purchases/${id}/`,
         data
     );
