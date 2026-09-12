@@ -1,36 +1,74 @@
 from django.urls import path
 
 from .views import (
+    ReportDashboardAPIView,
+    ReportChartsAPIView,
     SalesReportAPIView,
     PurchaseReportAPIView,
     InventoryReportAPIView,
     PaymentReportAPIView,
+    ExportStubAPIView,
 )
 
 urlpatterns = [
-
+    path(
+        "dashboard/",
+        ReportDashboardAPIView.as_view(),
+        name="report-dashboard",
+    ),
+    path(
+        "charts/",
+        ReportChartsAPIView.as_view(),
+        name="report-charts",
+    ),
     path(
         "sales/",
         SalesReportAPIView.as_view(),
         name="sales-report",
     ),
-
     path(
         "purchases/",
         PurchaseReportAPIView.as_view(),
         name="purchase-report",
     ),
-
     path(
         "inventory/",
         InventoryReportAPIView.as_view(),
         name="inventory-report",
     ),
-
     path(
         "payments/",
         PaymentReportAPIView.as_view(),
         name="payment-report",
     ),
-
-]
+    path(
+        "sales/pdf/",
+        ExportStubAPIView.as_view(),
+        name="sales-pdf",
+    ),
+    path(
+        "sales/excel/",
+        ExportStubAPIView.as_view(),
+        name="sales-excel",
+    ),
+    path(
+        "purchase/pdf/",
+        ExportStubAPIView.as_view(),
+        name="purchase-pdf",
+    ),
+    path(
+        "purchase/excel/",
+        ExportStubAPIView.as_view(),
+        name="purchase-excel",
+    ),
+    path(
+        "inventory/pdf/",
+        ExportStubAPIView.as_view(),
+        name="inventory-pdf",
+    ),
+    path(
+        "inventory/excel/",
+        ExportStubAPIView.as_view(),
+        name="inventory-excel",
+    ),
+]

@@ -19,25 +19,30 @@ export const getManufacturingOrders = async (
     return response.data;
 };
 
-export const getManufacturingMasters =
-    async () => {
-
-        const [
-            products,
-            employees,
-        ] = await Promise.all([
+export const getManufacturingMasters = async () => {
+    try {
+        const [productsRes, employeesRes] = await Promise.allSettled([
             api.get("products/"),
             api.get("employees/"),
         ]);
 
-        return {
-            products:
-                products.data.results,
-            employees:
-                employees.data.results,
-        };
+        const products = productsRes.status === "fulfilled"
+            ? (productsRes.value.data?.results || productsRes.value.data || [])
+            : [];
 
-    };
+        const employees = employeesRes.status === "fulfilled"
+            ? (employeesRes.value.data?.results || employeesRes.value.data || [])
+            : [];
+
+        return {
+            products: Array.isArray(products) ? products : [],
+            employees: Array.isArray(employees) ? employees : [],
+        };
+    } catch {
+        return { products: [], employees: [] };
+    }
+};
+
 
 export const createManufacturingOrder =
     async (data) => {
