@@ -1,0 +1,45 @@
+# Root .gitignore for Garments ERP
+
+# Dependencies
+node_modules/
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python & Virtual Environments
+myenv/
+venv/
+ENV/
+env/
+**/myenv/
+**/venv/
+**/env/
+*.pyc
+__pycache__/
+**/__pycache__/
+*.pyo
+*.pyd
+.Python
+*.sqlite3
+
+# Environment Variables & Secrets (NEVER push .env to GitHub)
+.env
+**/.env
+.env.local
+.env.*.local
+
+# Production Builds
+dist/
+**/dist/
+build/
+**/build/
+
+# Editor / IDE settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
