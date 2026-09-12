@@ -1,6 +1,7 @@
 // src/components/Sidebar.jsx
 
-import { NavLink } from "react-router-dom";
+import { useLayoutEffect, useEffect, useRef } from "react";
+import { NavLink, useLocation } from "react-router-dom";
 import { COLORS } from "../utils/colors";
 
 const menuGroups = [
@@ -59,8 +60,41 @@ const menuGroups = [
 ];
 
 function Sidebar() {
+  const asideRef = useRef(null);
+  const location = useLocation();
+
+  const handleScroll = (e) => {
+    sessionStorage.setItem("sidebar_scroll_pos", String(e.currentTarget.scrollTop));
+  };
+
+  useLayoutEffect(() => {
+    const aside = asideRef.current;
+    if (!aside) return;
+
+    const savedPos = sessionStorage.getItem("sidebar_scroll_pos");
+    if (savedPos !== null && !isNaN(Number(savedPos))) {
+      aside.scrollTop = Number(savedPos);
+    }
+
+    const activeEl = aside.querySelector(".sidebar-active-link");
+    if (activeEl) {
+      activeEl.scrollIntoView({ block: "nearest", behavior: "auto" });
+      sessionStorage.setItem("sidebar_scroll_pos", String(aside.scrollTop));
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (asideRef.current) {
+        sessionStorage.setItem("sidebar_scroll_pos", String(asideRef.current.scrollTop));
+      }
+    };
+  }, []);
+
   return (
     <aside
+      ref={asideRef}
+      onScroll={handleScroll}
       style={{
         width: 270,
         height: "100vh",
@@ -73,8 +107,11 @@ function Sidebar() {
         zIndex: 1000,
         display: "flex",
         flexDirection: "column",
+        scrollbarWidth: "thin",
+        scrollbarColor: "rgba(255, 255, 255, 0.2) transparent",
       }}
     >
+
       {/* Brand Header */}
       <div
         style={{
@@ -147,6 +184,7 @@ function Sidebar() {
                 <NavLink
                   key={itemIdx}
                   to={item.path}
+                  className={({ isActive }) => (isActive ? "sidebar-active-link" : "")}
                   style={({ isActive }) => ({
                     display: "flex",
                     alignItems: "center",
@@ -169,6 +207,7 @@ function Sidebar() {
                   />
                   <span>{item.name}</span>
                 </NavLink>
+
               ))}
             </div>
           </div>
