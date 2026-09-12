@@ -20,7 +20,7 @@ export const createUnit = async (data) => {
 };
 
 export const updateUnit = async (id, data) => {
-    const response = await api.put(`masters/units/${id}/`, data);
+    const response = await api.patch(`masters/units/${id}/`, data);
 
     return response.data;
 };

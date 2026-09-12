@@ -10,6 +10,7 @@ import {
 } from "./CategoryService";
 
 import { toast } from "react-toastify";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 function CategoryList() {
     const [categories, setCategories] = useState([]);
@@ -36,12 +37,12 @@ function CategoryList() {
                 search
             );
 
-            setCategories(data.results);
+            setCategories(data?.results || []);
 
-            setCount(data.count);
-        } catch {
+            setCount(data?.count || 0);
+        } catch (error) {
             toast.error(
-                "Failed to load categories."
+                getErrorMessage(error, "Failed to load categories.")
             );
         } finally {
             setLoading(false);
@@ -80,8 +81,7 @@ function CategoryList() {
             fetchCategories();
         } catch (error) {
             toast.error(
-                error.response?.data?.name?.[0] ||
-                    "Something went wrong."
+                getErrorMessage(error, "Failed to save category.")
             );
         } finally {
             setLoading(false);
@@ -104,9 +104,9 @@ function CategoryList() {
             );
 
             fetchCategories();
-        } catch {
+        } catch (error) {
             toast.error(
-                "Unable to delete category."
+                getErrorMessage(error, "Unable to delete category.")
             );
         }
     };

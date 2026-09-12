@@ -10,74 +10,83 @@ function CategoryModal({
     loading,
 }) {
     const [name, setName] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (category) {
-            setName(category.name);
+            setName(category.name || "");
         } else {
             setName("");
         }
-    }, [category]);
+        setError("");
+    }, [category, show]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!name.trim()) return;
+        if (!name.trim()) {
+            setError("Category name is required.");
+            return;
+        }
 
+        setError("");
         onSubmit({
             name: name.trim(),
         });
     };
 
+    const handleClose = () => {
+        setError("");
+        onHide();
+    };
+
     return (
         <Modal
             show={show}
-            onHide={onHide}
+            onHide={handleClose}
             centered
         >
             <Modal.Header closeButton>
-
                 <Modal.Title>
-
                     {category ? "Edit Category" : "Add Category"}
-
                 </Modal.Title>
-
             </Modal.Header>
 
-            <Form onSubmit={handleSubmit}>
-
+            <Form onSubmit={handleSubmit} noValidate>
                 <Modal.Body>
-
                     <Form.Group>
-
                         <Form.Label>
-
-                            Category Name
-
+                            Category Name <span className="text-danger">*</span>
                         </Form.Label>
 
                         <Form.Control
                             value={name}
-                            onChange={(e) =>
-                                setName(e.target.value)
-                            }
+                            isInvalid={!!error}
+                            placeholder="e.g. Cotton Shirts, Jeans..."
+                            autoFocus
+                            onChange={(e) => {
+                                setName(e.target.value);
+                                if (error) setError("");
+                            }}
                             style={{
                                 background: COLORS.inputBackground,
                                 color: COLORS.text,
-                                border: `1px solid ${COLORS.border}`,
+                                border: `1px solid ${error ? "#dc3545" : COLORS.border}`,
                             }}
                         />
 
+                        {error && (
+                            <Form.Control.Feedback type="invalid" style={{ display: "block" }}>
+                                {error}
+                            </Form.Control.Feedback>
+                        )}
                     </Form.Group>
-
                 </Modal.Body>
 
                 <Modal.Footer>
-
                     <Button
                         variant="secondary"
-                        onClick={onHide}
+                        onClick={handleClose}
                     >
                         Cancel
                     </Button>
@@ -86,15 +95,10 @@ function CategoryModal({
                         type="submit"
                         disabled={loading}
                     >
-                        {loading
-                            ? "Saving..."
-                            : "Save"}
+                        {loading ? "Saving..." : "Save"}
                     </Button>
-
                 </Modal.Footer>
-
             </Form>
-
         </Modal>
     );
 }

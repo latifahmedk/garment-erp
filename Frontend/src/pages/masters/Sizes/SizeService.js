@@ -20,7 +20,7 @@ export const createSize = async (data) => {
 };
 
 export const updateSize = async (id, data) => {
-    const response = await api.put(`masters/sizes/${id}/`, data);
+    const response = await api.patch(`masters/sizes/${id}/`, data);
 
     return response.data;
 };

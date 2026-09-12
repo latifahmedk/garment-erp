@@ -20,9 +20,11 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password")
+        role = validated_data.pop("role", User.Role.ADMIN)
 
         user = User(
-            role=User.Role.RETAIL,
+            role=role,
+            is_staff=True,
             **validated_data
         )
         user.set_password(password)

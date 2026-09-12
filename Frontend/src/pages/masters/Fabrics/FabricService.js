@@ -20,7 +20,7 @@ export const createFabric = async (data) => {
 };
 
 export const updateFabric = async (id, data) => {
-    const response = await api.put(`masters/fabrics/${id}/`, data);
+    const response = await api.patch(`masters/fabrics/${id}/`, data);
 
     return response.data;
 };

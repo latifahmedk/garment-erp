@@ -12,6 +12,7 @@ import {
 } from "./ColorService";
 
 import { toast } from "react-toastify";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 function ColorList() {
 
@@ -41,14 +42,14 @@ function ColorList() {
                 search
             );
 
-            setColors(data.results);
+            setColors(data?.results || []);
 
-            setCount(data.count);
+            setCount(data?.count || 0);
 
-        } catch {
+        } catch (error) {
 
             toast.error(
-                "Failed to load colors."
+                getErrorMessage(error, "Failed to load colors.")
             );
 
         } finally {
@@ -101,8 +102,7 @@ function ColorList() {
         } catch (error) {
 
             toast.error(
-                error.response?.data?.name?.[0] ||
-                    "Something went wrong."
+                getErrorMessage(error, "Failed to save color.")
             );
 
         } finally {
@@ -132,10 +132,10 @@ function ColorList() {
 
             fetchColors();
 
-        } catch {
+        } catch (error) {
 
             toast.error(
-                "Unable to delete color."
+                getErrorMessage(error, "Unable to delete color.")
             );
 
         }

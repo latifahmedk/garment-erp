@@ -12,6 +12,7 @@ import {
 } from "./FabricService";
 
 import { toast } from "react-toastify";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 function FabricList() {
 
@@ -41,14 +42,14 @@ function FabricList() {
                 search
             );
 
-            setFabrics(data.results);
+            setFabrics(data?.results || []);
 
-            setCount(data.count);
+            setCount(data?.count || 0);
 
-        } catch {
+        } catch (error) {
 
             toast.error(
-                "Failed to load fabrics."
+                getErrorMessage(error, "Failed to load fabrics.")
             );
 
         } finally {
@@ -101,8 +102,7 @@ function FabricList() {
         } catch (error) {
 
             toast.error(
-                error.response?.data?.name?.[0] ||
-                    "Something went wrong."
+                getErrorMessage(error, "Failed to save fabric.")
             );
 
         } finally {
@@ -132,10 +132,10 @@ function FabricList() {
 
             fetchFabrics();
 
-        } catch {
+        } catch (error) {
 
             toast.error(
-                "Unable to delete fabric."
+                getErrorMessage(error, "Unable to delete fabric.")
             );
 
         }

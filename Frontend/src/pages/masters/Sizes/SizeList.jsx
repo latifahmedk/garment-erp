@@ -12,6 +12,7 @@ import {
 } from "./SizeService";
 
 import { toast } from "react-toastify";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 function SizeList() {
 
@@ -41,14 +42,14 @@ function SizeList() {
                 search
             );
 
-            setSizes(data.results);
+            setSizes(data?.results || []);
 
-            setCount(data.count);
+            setCount(data?.count || 0);
 
-        } catch {
+        } catch (error) {
 
             toast.error(
-                "Failed to load sizes."
+                getErrorMessage(error, "Failed to load sizes.")
             );
 
         } finally {
@@ -101,8 +102,7 @@ function SizeList() {
         } catch (error) {
 
             toast.error(
-                error.response?.data?.name?.[0] ||
-                    "Something went wrong."
+                getErrorMessage(error, "Failed to save size.")
             );
 
         } finally {
@@ -132,10 +132,10 @@ function SizeList() {
 
             fetchSizes();
 
-        } catch {
+        } catch (error) {
 
             toast.error(
-                "Unable to delete size."
+                getErrorMessage(error, "Unable to delete size.")
             );
 
         }

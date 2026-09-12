@@ -18,7 +18,7 @@ export const createCategory = async (data) => {
 };
 
 export const updateCategory = async (id, data) => {
-    const response = await api.put(`masters/categories/${id}/`, data);
+    const response = await api.patch(`masters/categories/${id}/`, data);
 
     return response.data;
 };

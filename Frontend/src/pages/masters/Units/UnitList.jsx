@@ -12,6 +12,7 @@ import {
 } from "./UnitService";
 
 import { toast } from "react-toastify";
+import { getErrorMessage } from "../../../utils/errorHelper";
 
 function UnitList() {
     const [units, setUnits] = useState([]);
@@ -34,10 +35,12 @@ function UnitList() {
                 search
             );
 
-            setUnits(data.results);
-            setCount(data.count);
-        } catch {
-            toast.error("Failed to load units.");
+            setUnits(data?.results || []);
+            setCount(data?.count || 0);
+        } catch (error) {
+            toast.error(
+                getErrorMessage(error, "Failed to load units.")
+            );
         } finally {
             setLoading(false);
         }
@@ -74,8 +77,7 @@ function UnitList() {
             fetchUnits();
         } catch (error) {
             toast.error(
-                error.response?.data?.name?.[0] ||
-                    "Something went wrong."
+                getErrorMessage(error, "Failed to save unit.")
             );
         } finally {
             setLoading(false);
@@ -98,9 +100,9 @@ function UnitList() {
             );
 
             fetchUnits();
-        } catch {
+        } catch (error) {
             toast.error(
-                "Unable to delete unit."
+                getErrorMessage(error, "Unable to delete unit.")
             );
         }
     };

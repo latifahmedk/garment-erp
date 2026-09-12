@@ -12,29 +12,40 @@ function ColorModal({
     loading,
 }) {
     const [name, setName] = useState("");
+    const [error, setError] = useState("");
 
     useEffect(() => {
         if (color) {
-            setName(color.name);
+            setName(color.name || "");
         } else {
             setName("");
         }
-    }, [color]);
+        setError("");
+    }, [color, show]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (!name.trim()) return;
+        if (!name.trim()) {
+            setError("Color name is required.");
+            return;
+        }
 
+        setError("");
         onSubmit({
             name: name.trim(),
         });
     };
 
+    const handleClose = () => {
+        setError("");
+        onHide();
+    };
+
     return (
         <Modal
             show={show}
-            onHide={onHide}
+            onHide={handleClose}
             centered
         >
             <Modal.Header closeButton>
@@ -43,37 +54,42 @@ function ColorModal({
                 </Modal.Title>
             </Modal.Header>
 
-            <Form onSubmit={handleSubmit}>
+            <Form onSubmit={handleSubmit} noValidate>
                 <Modal.Body>
-
                     <Form.Group>
-
                         <Form.Label>
-                            Color Name
+                            Color Name <span className="text-danger">*</span>
                         </Form.Label>
 
                         <Form.Control
                             value={name}
-                            onChange={(e) =>
-                                setName(e.target.value)
-                            }
+                            isInvalid={!!error}
+                            placeholder="e.g. Navy Blue, Crimson, Olive..."
+                            autoFocus
+                            onChange={(e) => {
+                                setName(e.target.value);
+                                if (error) setError("");
+                            }}
                             style={{
                                 background:
                                     COLORS.inputBackground,
                                 color: COLORS.text,
-                                border: `1px solid ${COLORS.border}`,
+                                border: `1px solid ${error ? "#dc3545" : COLORS.border}`,
                             }}
                         />
 
+                        {error && (
+                            <Form.Control.Feedback type="invalid" style={{ display: "block" }}>
+                                {error}
+                            </Form.Control.Feedback>
+                        )}
                     </Form.Group>
-
                 </Modal.Body>
 
                 <Modal.Footer>
-
                     <Button
                         variant="secondary"
-                        onClick={onHide}
+                        onClick={handleClose}
                     >
                         Cancel
                     </Button>
@@ -86,11 +102,8 @@ function ColorModal({
                             ? "Saving..."
                             : "Save"}
                     </Button>
-
                 </Modal.Footer>
-
             </Form>
-
         </Modal>
     );
 }

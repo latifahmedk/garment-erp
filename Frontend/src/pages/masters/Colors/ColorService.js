@@ -20,7 +20,7 @@ export const createColor = async (data) => {
 };
 
 export const updateColor = async (id, data) => {
-    const response = await api.put(`masters/colors/${id}/`, data);
+    const response = await api.patch(`masters/colors/${id}/`, data);
 
     return response.data;
 };
