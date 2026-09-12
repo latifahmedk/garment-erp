@@ -29,7 +29,7 @@ export const updateCustomer = async (
     id,
     data
 ) => {
-    const response = await api.put(
+    const response = await api.patch(
         `customers/${id}/`,
         data
     );

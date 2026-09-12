@@ -29,7 +29,7 @@ export const updateSupplier = async (
     id,
     data
 ) => {
-    const response = await api.put(
+    const response = await api.patch(
         `suppliers/${id}/`,
         data
     );
